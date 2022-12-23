@@ -38,7 +38,10 @@ fn read_toml_config() {
     };
 
     // parse toml
-    let config: Config = toml::from_str(&str_val).unwrap();
+    let config: Config = match toml::from_str(&str_val) {
+        Ok(config) => config,
+        Err(_) => panic!("Invalid config, can't parse to string"),
+    };
     println!(
         "ip: {}, port: {:#?}, password: {:#?}",
         config.ip, config.port, config.password

@@ -3,10 +3,8 @@ use std::env;
 use std::fs::File;
 use std::io::prelude::*;
 
-#[tokio::main]
-async fn main() {
-    // let result = reqwest::get("http://192.168.10.196/api/show/text/HiBaby").await;
-    // println!("{:#?}", result)
+fn main() {
+    make_request();
     read_toml_config()
 }
 
@@ -48,5 +46,15 @@ fn read_toml_config() {
 
     for x in config.endpoints.unwrap() {
         println!("{:#?}", x);
+    }
+}
+
+fn make_request() {
+    match ureq::get("http://192.168.10.196/api/show/text/HiBaby").call() {
+        Ok(response) => println!("response: {:#?}", response),
+        Err(ureq::Error::Status(code, response)) => {
+            println!("code: {} response: {:#?}", code, response)
+        }
+        Err(_) => println!("Could not process request"),
     }
 }

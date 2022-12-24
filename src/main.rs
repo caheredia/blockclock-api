@@ -1,3 +1,4 @@
+use chrono::prelude::*;
 use serde_derive::Deserialize;
 use std::env;
 use std::fs::File;
@@ -6,15 +7,22 @@ use std::thread::sleep;
 use std::time::Duration;
 
 fn main() {
+    let time = Local::now()
+        .naive_local()
+        .format("%a %b %e %T %Y %I %p")
+        .to_string();
+    println!("{:#?}", time);
     let urls = read_urls_from_toml_config();
     println!("Calling endpoints:");
     for url in &urls {
         println!("\t {:#?}", url)
     }
-    for url in &urls {
-        println!("URL: {:#?}", url);
-        make_request(url);
-        sleep(Duration::from_secs(5 * 60));
+    loop {
+        for url in &urls {
+            println!("URL: {:#?}", url);
+            // make_request(url);
+            sleep(Duration::from_secs(5 * 60));
+        }
     }
 }
 

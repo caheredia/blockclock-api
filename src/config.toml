@@ -1,7 +1,7 @@
-ip = "http://192.168.10.196"
+ip = "http://192.168.10.196/api/show/text/"
 
 [[endpoints]]
-path = "api/show/text/HiBaby"
+path = "Wow"
 
 [[endpoints]]
-path = "api/show/text/Wow"
+path = "HiBaby"

@@ -2,10 +2,20 @@ use serde_derive::Deserialize;
 use std::env;
 use std::fs::File;
 use std::io::prelude::*;
+use std::thread::sleep;
+use std::time::Duration;
 
 fn main() {
-    make_request();
-    read_toml_config()
+    let urls = read_urls_from_toml_config();
+    println!("Calling endpoints:");
+    for url in &urls {
+        println!("\t {:#?}", url)
+    }
+    for url in &urls {
+        println!("URL: {:#?}", url);
+        make_request(url);
+        sleep(Duration::from_secs(5 * 60));
+    }
 }
 
 #[derive(Debug, Deserialize)]
@@ -21,7 +31,7 @@ struct Endpoint {
     path: Option<String>,
 }
 
-fn read_toml_config() {
+fn read_urls_from_toml_config() -> Vec<String> {
     // read file
     let file_path =
         env::current_dir().unwrap().to_str().unwrap().to_owned() + "/" + "src/config.toml";
@@ -47,13 +57,24 @@ fn read_toml_config() {
         config.ip, config.port, config.password
     );
 
-    for x in config.endpoints.unwrap() {
-        println!("{:#?}", x);
+    let endpoints = match config.endpoints {
+        Some(e) => e,
+        None => panic!("No Endpoints found"),
+    };
+
+    // append ip to path
+    let mut urls = Vec::new();
+    for endpoint in endpoints {
+        match endpoint.path {
+            Some(path) => urls.push(config.ip.to_owned() + &path),
+            None => continue,
+        }
     }
+    return urls;
 }
 
-fn make_request() {
-    match ureq::get("http://192.168.10.196/api/show/text/HiBaby").call() {
+fn make_request(url: &str) {
+    match ureq::get(url).call() {
         Ok(response) => println!("response: {:#?}", response),
         Err(ureq::Error::Status(code, response)) => {
             println!("code: {} response: {:#?}", code, response)

@@ -1,7 +1,17 @@
-ip = "http://192.168.10.196/api/show/text/"
+ip = "http://192.168.10.196/api/"
 
 [[endpoints]]
-path = "Wow"
+path = "show/text/Wow"
 
 [[endpoints]]
-path = "HiBaby"
+path = "show/text/HiBaby"
+
+[[endpoints]]
+path = "pick/cm.bitnodes.reachable_bitcoin_nodes"
+
+[[endpoints]]
+path = "pick/datetime.local.date"
+
+[[endpoints]]
+path = "pick/cm.markets.sats_per_dollar"
+

@@ -1,17 +1,15 @@
-use chrono::prelude::*;
 use serde_derive::Deserialize;
 use std::env;
 use std::fs::File;
 use std::io::prelude::*;
 use std::thread::sleep;
 use std::time::Duration;
+mod time_utils;
+use time_utils::{current_time, formatted_date};
 
 fn main() {
-    let time = Local::now()
-        .naive_local()
-        .format("%a %b %e %T %Y %I %p")
-        .to_string();
-    println!("{:#?}", time);
+    current_time(None);
+    formatted_date(None);
     let urls = read_urls_from_toml_config();
     println!("Calling endpoints:");
     for url in &urls {

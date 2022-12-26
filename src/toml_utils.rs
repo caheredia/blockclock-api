@@ -34,17 +34,20 @@ fn read_toml_file() -> String {
     return toml_str;
 }
 
-pub fn read_urls_from_toml_config() -> Vec<String> {
-    let toml_str = read_toml_file();
+pub fn read_urls_from_toml_config(toml_str: Option<String>) -> Vec<String> {
+    let toml_str = match toml_str {
+        Some(toml_str) => toml_str,
+        None => read_toml_file(),
+    };
     // parse toml
     let config: Config = match toml::from_str(&toml_str) {
         Ok(config) => config,
         Err(_) => panic!("Invalid config, can't parse to string"),
     };
-    println!(
-        "ip: {}, port: {:#?}, password: {:#?}",
-        config.ip, config.port, config.password
-    );
+    // println!(
+    //     "ip: {}, port: {:#?}, password: {:#?}",
+    //     config.ip, config.port, config.password
+    // );
 
     let endpoints = match config.endpoints {
         Some(e) => e,
@@ -59,5 +62,41 @@ pub fn read_urls_from_toml_config() -> Vec<String> {
             None => continue,
         }
     }
-    return urls;
+    urls
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_read_urls_from_toml_config_positive_case() {
+        let config_str = "
+            ip='localhost/api/'
+            [[endpoints]]
+            path = 'show/text/Wow'
+            [[endpoints]]
+            path = 'pick/cm.markets.sats_per_dollar'
+            ";
+        assert_eq!(
+            vec![
+                "localhost/api/show/text/Wow",
+                "localhost/api/pick/cm.markets.sats_per_dollar"
+            ],
+            read_urls_from_toml_config(Some(config_str.to_string()))
+        );
+    }
+
+    #[test]
+    #[should_panic(expected = "Invalid config, can't parse to string")]
+    fn test_read_urls_from_toml_config_bad_config() {
+        // bad config
+        read_urls_from_toml_config(Some("Not a valid config".to_string()));
+    }
+    #[test]
+    #[should_panic(expected = "No Endpoints found")]
+    fn test_read_urls_from_toml_config_no_endpoints() {
+        // missing endpoints
+        read_urls_from_toml_config(Some("ip='localhost/api/'".to_string()));
+    }
 }

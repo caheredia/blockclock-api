@@ -10,7 +10,7 @@ on:
 
 jobs:
 
-  test_phaser:
+  test_and_build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -34,11 +34,9 @@ jobs:
 
       - name: Test
         run: |
-          cd phaser
           cargo check
           cargo test --all          
 
       - name: Build
         run: |
-          cd phaser
           cargo build --release  

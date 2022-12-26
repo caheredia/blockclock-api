@@ -1,12 +1,9 @@
 name: CI
 
-# This workflow run tests and build for each push
-
 on:
   pull_request:
     branches:
       - main
-      - 'feature-**'
 
 jobs:
 
@@ -15,10 +12,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Update local toolchain
-        run: |
-          rustup update
-          rustup component add clippy
+      # - name: Update local toolchain
+      #   run: |
+      #     rustup update
+      #     rustup component add clippy
 
       - name: Toolchain info
         run: |
@@ -34,7 +31,7 @@ jobs:
       - name: Test
         run: |
           cargo check
-          cargo test --verbose 
+          cargo test
 
       - name: Build
         run: |

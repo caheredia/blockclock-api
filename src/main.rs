@@ -8,7 +8,7 @@ use toml_utils::read_urls_from_toml_config;
 fn main() {
     current_time(None);
     formatted_date(None);
-    let urls = read_urls_from_toml_config();
+    let urls = read_urls_from_toml_config(None);
     println!("Calling endpoints:");
     for url in &urls {
         println!("\t {:#?}", url)
@@ -16,7 +16,7 @@ fn main() {
     loop {
         for url in &urls {
             println!("URL: {:#?}", url);
-            // make_request(url);
+            make_request(url);
             sleep(Duration::from_secs(5 * 60));
         }
     }

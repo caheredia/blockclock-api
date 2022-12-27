@@ -1,18 +1,21 @@
 use std::thread::sleep;
 use std::time::Duration;
 mod time_utils;
-use time_utils::{current_time, formatted_date};
+use time_utils::{formatted_date, get_now};
 mod toml_utils;
-use toml_utils::read_urls_from_toml_config;
+use toml_utils::{read_toml_file, read_urls_from_toml_config};
 
 fn main() {
-    current_time(None);
-    formatted_date(None);
-    let urls = read_urls_from_toml_config(None);
+    let toml_str = read_toml_file();
+    let urls = read_urls_from_toml_config(toml_str);
     println!("Calling endpoints:");
     for url in &urls {
         println!("\t {:#?}", url)
     }
+
+    let timestamp = get_now();
+    formatted_date(timestamp);
+
     loop {
         for url in &urls {
             println!("URL: {:#?}", url);

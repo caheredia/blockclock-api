@@ -15,8 +15,8 @@ struct Config {
 struct Endpoint {
     path: Option<String>,
 }
-
-fn read_toml_file() -> String {
+/// Converts a toml file to a string
+pub fn read_toml_file() -> String {
     // read file
     let file_path =
         env::current_dir().unwrap().to_str().unwrap().to_owned() + "/" + "src/config.toml";
@@ -34,11 +34,7 @@ fn read_toml_file() -> String {
     return toml_str;
 }
 
-pub fn read_urls_from_toml_config(toml_str: Option<String>) -> Vec<String> {
-    let toml_str = match toml_str {
-        Some(toml_str) => toml_str,
-        None => read_toml_file(),
-    };
+pub fn read_urls_from_toml_config(toml_str: String) -> Vec<String> {
     // parse toml
     let config: Config = match toml::from_str(&toml_str) {
         Ok(config) => config,
@@ -83,7 +79,7 @@ mod tests {
                 "localhost/api/show/text/Wow",
                 "localhost/api/pick/cm.markets.sats_per_dollar"
             ],
-            read_urls_from_toml_config(Some(config_str.to_string()))
+            read_urls_from_toml_config(config_str.to_string())
         );
     }
 
@@ -91,12 +87,12 @@ mod tests {
     #[should_panic(expected = "Invalid config, can't parse to string")]
     fn test_read_urls_from_toml_config_bad_config() {
         // bad config
-        read_urls_from_toml_config(Some("Not a valid config".to_string()));
+        read_urls_from_toml_config("Not a valid config".to_string());
     }
     #[test]
     #[should_panic(expected = "No Endpoints found")]
     fn test_read_urls_from_toml_config_no_endpoints() {
         // missing endpoints
-        read_urls_from_toml_config(Some("ip='localhost/api/'".to_string()));
+        read_urls_from_toml_config("ip='localhost/api/'".to_string());
     }
 }

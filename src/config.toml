@@ -1,4 +1,4 @@
-ip = "http://192.168.10.196/api/"
+ip = "http://192.168.10.196"
 
 [[endpoints]]
 path = "show/text/HiBaby"

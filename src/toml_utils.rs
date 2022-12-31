@@ -2,6 +2,7 @@ use serde_derive::Deserialize;
 use std::env;
 use std::fs::File;
 use std::io::prelude::*;
+use std::net::IpAddr;
 
 #[derive(Debug, Deserialize)]
 struct Config {
@@ -40,10 +41,11 @@ pub fn read_urls_from_toml_config(toml_str: String) -> Vec<String> {
         Ok(config) => config,
         Err(_) => panic!("Invalid config, can't parse to string"),
     };
-    // println!(
-    //     "ip: {}, port: {:#?}, password: {:#?}",
-    //     config.ip, config.port, config.password
-    // );
+
+    let ip: IpAddr = match config.ip.parse() {
+        Ok(ip) => ip,
+        Err(_) => panic!("Not a valid IP address"),
+    };
 
     let endpoints = match config.endpoints {
         Some(e) => e,
@@ -54,7 +56,7 @@ pub fn read_urls_from_toml_config(toml_str: String) -> Vec<String> {
     let mut urls = Vec::new();
     for endpoint in endpoints {
         match endpoint.path {
-            Some(path) => urls.push(config.ip.to_owned() + &path),
+            Some(path) => urls.push(format!("http://{}/api/{}", ip.to_string(), path)),
             None => continue,
         }
     }
@@ -68,7 +70,7 @@ mod tests {
     #[test]
     fn test_read_urls_from_toml_config_positive_case() {
         let config_str = "
-            ip='localhost/api/'
+            ip='127.0.0.1'
             [[endpoints]]
             path = 'show/text/Wow'
             [[endpoints]]
@@ -76,8 +78,8 @@ mod tests {
             ";
         assert_eq!(
             vec![
-                "localhost/api/show/text/Wow",
-                "localhost/api/pick/cm.markets.sats_per_dollar"
+                "http://127.0.0.1/api/show/text/Wow",
+                "http://127.0.0.1/api/pick/cm.markets.sats_per_dollar"
             ],
             read_urls_from_toml_config(config_str.to_string())
         );
@@ -89,10 +91,18 @@ mod tests {
         // bad config
         read_urls_from_toml_config("Not a valid config".to_string());
     }
+
     #[test]
     #[should_panic(expected = "No Endpoints found")]
     fn test_read_urls_from_toml_config_no_endpoints() {
         // missing endpoints
-        read_urls_from_toml_config("ip='localhost/api/'".to_string());
+        read_urls_from_toml_config("ip='127.0.0.1'".to_string());
+    }
+
+    #[test]
+    #[should_panic(expected = "Not a valid IP address")]
+    fn test_read_urls_from_toml_config_bad_ip() {
+        // missing endpoints
+        read_urls_from_toml_config("ip='127.0.1'".to_string());
     }
 }

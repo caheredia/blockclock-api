@@ -10,6 +10,8 @@ Parsing toml files, tests included
 Blockclock mini push API
 - https://blockclockmini.com/api
 
+Python Examples
+- https://www.notion.so/BLOCKCLOCKmini-API-05f6c24cf71748098094508ca5b2dd7a
 
 # Example API calls
 ```console

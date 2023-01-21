@@ -1,3 +1,9 @@
+# TODO
+- add scheme to config, make "http" default
+- look into src:Path for loading files
+- add password as argument in config
+- add port as argument in config
+
 # Resources
 Ureq examples
 - https://github.com/algesten/ureq

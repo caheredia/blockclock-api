@@ -1,6 +1,7 @@
 use chrono::prelude::*;
 
 #[derive(Debug, PartialEq)]
+// A Struct used for conveying the difference between two timestamps
 pub struct TimeDelta {
     years: i64,
     months: i64,
@@ -42,6 +43,7 @@ pub fn formatted_date(timestamp: NaiveDateTime) -> String {
     format!("{} {} {}", weekday, &short_month, month_day)
 }
 
+/// Returns the difference between two timestamps
 pub fn find_timedelta(x: NaiveDateTime, y: NaiveDateTime) -> TimeDelta {
     // subtract floored time units from total minutes
     let year_minutes: i64 = 60 * 24 * 365;

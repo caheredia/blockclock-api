@@ -1,4 +1,4 @@
-ip = "http://192.168.10.196"
+ip = "192.168.10.196"
 
 [[endpoints]]
 path = "show/text/HiBaby"
@@ -11,7 +11,6 @@ path = "pick/datetime.local.date"
 
 [[endpoints]]
 path = "show/text/Wow"
-
 
 [[endpoints]]
 path = "pick/cm.bitnodes.reachable_bitcoin_nodes"

@@ -7,9 +7,9 @@ use std::net::IpAddr;
 #[derive(Debug, Deserialize)]
 struct Config {
     ip: String,
-    port: Option<u16>,
-    password: Option<String>,
     endpoints: Option<Vec<Endpoint>>,
+    // port: Option<u16>,
+    // password: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]

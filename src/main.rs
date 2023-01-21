@@ -9,6 +9,7 @@ fn main() {
     let toml_str = read_toml_file();
     let urls = read_urls_from_toml_config(toml_str);
     println!("Calling endpoints:");
+
     for url in &urls {
         println!("\t {:#?}", url)
     }

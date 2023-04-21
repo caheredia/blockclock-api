@@ -16,25 +16,6 @@ pub fn get_now() -> NaiveDateTime {
     Local::now().naive_local()
 }
 
-// pub fn current_time(timestamp: Option<NaiveDateTime>) {
-//     let time = match timestamp {
-//         Some(timestamp) => timestamp,
-//         None => get_now(),
-//     };
-//     let weekday = time.format("%a").to_string();
-//     let short_month = time.format("%b").to_string();
-//     let month_day = time.format("%e").to_string();
-//     let year = time.format("%Y").to_string();
-//     let hour = time.format("%I").to_string();
-//     let minute = time.format("%M").to_string();
-//     let am_pm = time.format("%p").to_string();
-//
-//     println!(
-//         "{} {} {} {} {} {} {}",
-//         weekday, short_month, year, month_day, hour, minute, am_pm
-//     );
-// }
-
 pub fn formatted_date(timestamp: NaiveDateTime) -> String {
     let weekday = timestamp.format("%a").to_string();
     let short_month = timestamp.format("%b").to_string();
